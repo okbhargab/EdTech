@@ -9,17 +9,19 @@ app.use(cors({
   origin: "http://localhost:5173",
   credentials: true
 }));
+
+
 app.use(express.json());
 
 
 import { register,login } from "./auth.js";
 import { authMiddleware } from "./middleware.js";
-
+import testRoutes from "./test.js";
 
 app.post("/auth/reg",register);
 app.post("/auth/login",login);
 
-
+app.use("/tests",authMiddleware,testRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "Ok", message: "Backend running" });

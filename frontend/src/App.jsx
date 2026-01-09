@@ -37,6 +37,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/login.jsx";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Tests from "./pages/Tests.jsx";
+import TestAttempt from "./pages/TestAttempt.jsx";
+import Result from "./pages/Result.jsx";
 
 export default function App() {
   const token = localStorage.getItem("token");
@@ -47,6 +50,10 @@ export default function App() {
         <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/" />} />
+        <Route path="/tests" element={<Tests />} />
+        <Route path="/tests/:id" element={<TestAttempt />} />
+        <Route path="/result/:id" element={<Result />} />
+
       </Routes>
     </BrowserRouter>
   );
