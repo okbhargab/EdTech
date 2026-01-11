@@ -1,17 +1,23 @@
-const BASE = import.meta.env.VITE_API_BASE;
+const BASE_URL = "http://localhost:5000";
 
-export const api = async (url, method, body, token) => {
-  const res = await fetch(BASE + url, {
+export const api = async (path, method = "GET", body = null, token = null) => {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${BASE_URL}${path}`, {
     method,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token && { Authorization: `Bearer ${token}` })
-    },
-    body: body ? JSON.stringify(body) : undefined
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
   });
 
   if (!res.ok) {
-    throw new Error("API error");
+    const text = await res.text();
+    throw new Error(text || "API error");
   }
 
   return res.json();

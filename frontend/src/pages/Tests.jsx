@@ -10,7 +10,7 @@ export default function Tests() {
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <h2>Available Tests</h2>
       {tests.map(t => (
         <div key={t.id}>

@@ -18,7 +18,7 @@ import { register,login } from "./auth.js";
 import { authMiddleware } from "./middleware.js";
 import testRoutes from "./test.js";
 
-app.post("/auth/reg",register);
+app.post("/auth/register",register);
 app.post("/auth/login",login);
 
 app.use("/tests",authMiddleware,testRoutes);

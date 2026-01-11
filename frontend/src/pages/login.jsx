@@ -1,28 +1,53 @@
-import { useState, useEffect } from "react";
-import { api } from "../api";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { api } from "../api.jsx";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
 
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
+  const submit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const data = await api("/auth/login", "POST", form);
+
+      // 🔴 THIS IS CRITICAL
+      localStorage.setItem("token", data.token);
+
+      // ✅ move to dashboard
       window.location.href = "/dashboard";
+    } catch (err) {
+      console.error(err);
+      alert("Invalid email or password");
     }
-  }, []);
-
-  const submit = async () => {
-    const res = await api("/auth/login", "POST", { email, password });
-    localStorage.setItem("token", res.token);
-    window.location.href = "/dashboard";
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <input placeholder="Email" onChange={e => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
-      <button onClick={submit}>Login</button>
+    <div className="container">
+      <form onSubmit={submit}>
+        <h2>Login</h2>
+
+        <input
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          required
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          required
+        />
+
+        <button type="submit">Login</button>
+
+        <p>
+          Don’t have an account? <Link to="/register">Register here</Link>
+        </p>
+      </form>
     </div>
   );
 }

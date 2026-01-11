@@ -1,59 +1,55 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
-
-// function App() {
-//   const [count, setCount] = useState(0)
-
-//   return (
-//     <>
-//       <div>
-//         <a href="https://vite.dev" target="_blank">
-//           <img src={viteLogo} className="logo" alt="Vite logo" />
-//         </a>
-//         <a href="https://react.dev" target="_blank">
-//           <img src={reactLogo} className="logo react" alt="React logo" />
-//         </a>
-//       </div>
-//       <h1>Vite + React</h1>
-//       <div className="card">
-//         <button onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//         <p>
-//           Edit <code>src/App.jsx</code> and save to test HMR
-//         </p>
-//       </div>
-//       <p className="read-the-docs">
-//         Click on the Vite and React logos to learn more
-//       </p>
-//     </>
-//   )
-// }
-
-// export default App
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import Login from "./pages/login.jsx";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import Register from "./pages/Register.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 import Tests from "./pages/Tests.jsx";
 import TestAttempt from "./pages/TestAttempt.jsx";
 import Result from "./pages/Result.jsx";
 
 export default function App() {
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // can replace with spinner
+  }
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={token ? <Navigate to="/dashboard" /> : <Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/" />} />
-        <Route path="/tests" element={<Tests />} />
-        <Route path="/tests/:id" element={<TestAttempt />} />
-        <Route path="/result/:id" element={<Result />} />
+        <Route
+          path="/"
+          element={token ? <Navigate to="/dashboard" replace /> : <Login />}
+        />
 
+        <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/dashboard"
+          element={token ? <Dashboard /> : <Navigate to="/" replace />}
+        />
+
+        <Route
+          path="/tests"
+          element={token ? <Tests /> : <Navigate to="/" replace />}
+        />
+
+        <Route
+          path="/tests/:id"
+          element={token ? <TestAttempt /> : <Navigate to="/" replace />}
+        />
+
+        <Route
+          path="/result/:id"
+          element={token ? <Result /> : <Navigate to="/" replace />}
+        />
       </Routes>
     </BrowserRouter>
   );

@@ -26,23 +26,28 @@ export default function TestAttempt() {
   return (
     <div>
       <h2>Test</h2>
-      {questions.map(q => (
-        <div key={q.id}>
-          <p>{q.question}</p>
-          {Object.entries(q.options).map(([k, v]) => (
-            <label key={k}>
-              <input
-                type="radio"
-                name={q.id}
-                onChange={() =>
-                  setAnswers({ ...answers, [q.id]: k })
-                }
-              />
-              {v}
-            </label>
-          ))}
-        </div>
+      {questions.map((q, index) => (
+      <div key={q.id} className="question-card">
+      <p className="question-title">
+        Q{index + 1}. {q.question}
+        <span className="marks"> (1 mark)</span>
+      </p>
+
+      {Object.entries(q.options).map(([key, value]) => (
+        <label key={key} className="option">
+          <input
+            type="radio"
+            name={`question-${q.id}`}
+            onChange={() =>
+              setAnswers({ ...answers, [q.id]: key })
+            }
+          />
+          {value}
+        </label>
       ))}
+      </div>
+      ))}
+
       <button onClick={submit}>Submit</button>
     </div>
   );

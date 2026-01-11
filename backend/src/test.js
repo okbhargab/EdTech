@@ -54,11 +54,12 @@ router.get("/:id/result",async(req,res)=>{
     const result = await pool.query(
         `SELECT score, submitted_at
         FROM submissions
-        WHERE user_id = $1 AND test_id=$2`,
+        WHERE user_id = $1 AND test_id=$2
+        ORDER BY submitted_at DESC LIMIT 1`,
         [userId,testId]
     );
 
-    res.json(result.rows[0]);
+    res.json(result.rows[0] || null);
 });
 
 export default router;

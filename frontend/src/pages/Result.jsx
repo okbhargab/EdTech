@@ -14,7 +14,7 @@ export default function Result() {
   if (!result) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className="container">
       <h2>Result</h2>
       <p>Score: {result.score}</p>
       <p>Submitted at: {result.submitted_at}</p>
