@@ -17,11 +17,13 @@ app.use(express.json());
 import { register,login } from "./auth.js";
 import { authMiddleware } from "./middleware.js";
 import testRoutes from "./test.js";
+import analyticsRoutes from "../routes/analytics.routes.js";
 
 app.post("/auth/register",register);
 app.post("/auth/login",login);
 
 app.use("/tests",authMiddleware,testRoutes);
+app.use("/analytics",analyticsRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "Ok", message: "Backend running" });
