@@ -1,4 +1,4 @@
-import {pool} from "../src/db.js";
+import pool from "../src/db.js";
 
 export const getAnalyticsSummary = async(req,res)=>{
     try{
