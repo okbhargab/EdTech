@@ -10,6 +10,12 @@ const openai = new OpenAI({
 export const askAI = async(req,res)=>{
   try {
     const {question} = req.body;
+
+    await db.query(
+      `INSERT INTO chat_messages (user_id, role, message)
+      VALUES ($1, $2, $3)`,
+      [req.user.id, "user", question]
+    );
     if(!question){
       return res.status(400).json({message:"Question is required"});
     }
@@ -57,10 +63,34 @@ ${question}
     });
 
     const answer = completion.choices[0].message.content;
+    await db.query(
+  `INSERT INTO chat_messages (user_id, role, message)
+   VALUES ($1, $2, $3)`,
+  [req.user.id, "ai", answer]
+);
     res.json({answer});
   } catch (err) {
     console.error("AI ask Error:",err);
     res.status(500).json({message:"AI failed"});
+  }
+};
+
+export const getChatHistory = async (req, res) => {
+  try {
+    const result = await db.query(
+      `
+      SELECT role, message
+      FROM chat_messages
+      WHERE user_id = $1
+      ORDER BY created_at ASC
+      `,
+      [req.user.id]
+    );
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load history" });
   }
 };
 export const indexKnowledgeBase = async (req, res) => {

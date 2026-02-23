@@ -1,5 +1,15 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { api } from "../api.jsx";
+
+useEffect(()=>{
+    const token = localStorage.getItem("token");
+
+    api("/ai/history", "GET", null, token)
+    .then(data=>{
+        setMessages(data);
+    })
+    .catch(()=>{});
+},[]);
 
 export default function AITutor() {
   const [messages, setMessages] = useState([]);

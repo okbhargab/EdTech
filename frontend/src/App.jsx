@@ -9,6 +9,7 @@ import TestAttempt from "./pages/TestAttempt.jsx";
 import Result from "./pages/Result.jsx";
 import AdminAI from "./pages/AdminAi.jsx";
 import AITutor from "./pages/AITutor.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 export default function App() {
   const [token, setToken] = useState(null);
@@ -47,6 +48,11 @@ export default function App() {
         />
 
         <Route
+          path="/admin/dashboard"
+          element={token ? <AdminDashboard /> : <Navigate to="/" replace />}
+        />
+
+        <Route
           path="/tests/:id"
           element={token ? <TestAttempt /> : <Navigate to="/" replace />}
         />
@@ -55,7 +61,7 @@ export default function App() {
           path="/ai"
           element={token ? <AITutor /> : <Navigate to="/" replace />}
         />
-        
+
         <Route
           path="/result/:id" 
           element={token ? <Result /> : <Navigate to="/" replace />}
