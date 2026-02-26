@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://edtech-1-q9uy.onrender.com/";
 
 export const api = async (path, method = "GET", body = null, token = null) => {
   const headers = {
