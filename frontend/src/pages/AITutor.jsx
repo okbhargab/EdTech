@@ -1,7 +1,14 @@
 import { useState,useEffect } from "react";
 import { api } from "../api.jsx";
+import Layout from "../components/Layout.jsx";
 
-useEffect(()=>{
+
+export default function AITutor() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(()=>{
     const token = localStorage.getItem("token");
 
     api("/ai/history", "GET", null, token)
@@ -9,12 +16,7 @@ useEffect(()=>{
         setMessages(data);
     })
     .catch(()=>{});
-},[]);
-
-export default function AITutor() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+  },[]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -43,7 +45,7 @@ export default function AITutor() {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "700px", margin: "auto" }}>
+    <Layout>
       <h2>AI Tutor</h2>
 
       <div style={{
@@ -71,6 +73,6 @@ export default function AITutor() {
           Send
         </button>
       </div>
-    </div>
+    </Layout>
   );
 }

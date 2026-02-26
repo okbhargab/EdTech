@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { api } from "../api.jsx";
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import Layout from "../components/Layout.jsx";
+
 export default function AdminDashboard() {
   const [data, setData] = useState(null);
 
@@ -14,7 +16,7 @@ export default function AdminDashboard() {
   if (!data) return <div>Loading...</div>;
 
   return (
-  <div style={{ padding: "20px" }}>
+  <Layout>
     <h2>Admin Overview</h2>
 
     <div>
@@ -38,6 +40,6 @@ export default function AdminDashboard() {
       <Tooltip />
       <Line type="monotone" dataKey="count" stroke="#8884d8" />
     </LineChart>
-  </div>
+  </Layout>
 );
 }

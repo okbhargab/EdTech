@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
-
+import Layout from "../components/Layout.jsx";
 export default function Tests() {
   const [tests, setTests] = useState([]);
 
@@ -10,7 +10,7 @@ export default function Tests() {
   }, []);
 
   return (
-    <div className="container">
+    <Layout>
       <h2>Available Tests</h2>
       {tests.map(t => (
         <div key={t.id}>
@@ -19,6 +19,6 @@ export default function Tests() {
           <a href={`/tests/${t.id}`}>Start</a>
         </div>
       ))}
-    </div>
+    </Layout>
   );
 }
