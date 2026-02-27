@@ -28,6 +28,7 @@ app.use("/tests",authMiddleware,testRoutes);
 app.use("/analytics",analyticsRoutes);
 app.use("/ai", aiRoutes);
 app.use("/admin", adminRoutes);
+app.use("/api", router);
 
 app.get("/health", (req, res) => {
   res.json({ status: "Ok", message: "Backend running" });
