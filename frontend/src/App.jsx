@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useAuth } from "./AuthContext.jsx";
 
 import Login from "./pages/login.jsx";
 import Register from "./pages/Register.jsx";
@@ -12,18 +12,12 @@ import AITutor from "./pages/AITutor.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 export default function App() {
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
-    setLoading(false);
-  }, []);
+  const { token, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>; // can replace with spinner
+    return <div>Loading...</div>;
   }
+  
   return (
     <BrowserRouter>
       <Routes>
@@ -31,8 +25,6 @@ export default function App() {
           path="/"
           element={token ? <Navigate to="/dashboard" replace /> : <Login />}
         />
-
-        <Route path="/admin/ai" element={<AdminAI />} />
 
 
         <Route path="/register" element={<Register />} />

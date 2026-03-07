@@ -36,7 +36,7 @@ export default function Login() {
   return (
     <div className="container">
       <form onSubmit={submit}>
-        <h2>Login</h2>
+        <h2>Login to EdTech</h2>
 
         {error && <div style={{
           padding: "10px",
@@ -48,6 +48,7 @@ export default function Login() {
         }}>{error}</div>}
 
         <input
+          type="email"
           placeholder="Email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -69,7 +70,7 @@ export default function Login() {
         </button>
 
         <p>
-          Don’t have an account? <Link to="/register">Register here</Link>
+          Don't have an account? <Link to="/register">Register here</Link>
         </p>
       </form>
     </div>

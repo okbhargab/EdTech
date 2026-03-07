@@ -48,7 +48,7 @@ export default function TestAttempt() {
   };
 
   if (loading) return <Layout><p>Loading test...</p></Layout>;
-  if (error) return <Layout>
+  if (error && loading) return <Layout>
     <div style={{
       padding: "10px",
       background: "#fee",
@@ -77,25 +77,38 @@ export default function TestAttempt() {
         borderRadius: "4px"
       }}>{error}</div>}
       {questions.map((q, index) => (
-      <div key={q.id} className="question-card">
-      <p className="question-title">
-        Q{index + 1}. {q.question}
-        <span className="marks"> (1 mark)</span>
-      </p>
+        <div key={q.id} className="question-card" style={{
+          background: "#fff",
+          padding: "15px",
+          marginBottom: "15px",
+          borderRadius: "8px",
+          border: "1px solid #e5e7eb"
+        }}>
+          <p className="question-title" style={{ fontWeight: "bold", marginBottom: "10px" }}>
+            Q{index + 1}. {q.question}
+            <span className="marks" style={{ color: "#666", fontSize: "0.9em", marginLeft: "10px" }}>(1 mark)</span>
+          </p>
 
-      {Object.entries(q.options).map(([key, value]) => (
-        <label key={key} className="option">
-          <input
-            type="radio"
-            name={`question-${q.id}`}
-            onChange={() =>
-              setAnswers({ ...answers, [q.id]: key })
-            }
-          />
-          {value}
-        </label>
-      ))}
-      </div>
+          {Object.entries(q.options).map(([key, value]) => (
+            <label key={key} className="option" style={{
+              display: "block",
+              padding: "8px",
+              margin: "8px 0",
+              cursor: "pointer"
+            }}>
+              <input
+                type="radio"
+                name={`question-${q.id}`}
+                onChange={() =>
+                  setAnswers({ ...answers, [q.id]: key })
+                }
+                checked={answers[q.id] === key}
+                style={{ marginRight: "8px" }}
+              />
+              {value}
+            </label>
+          ))}
+        </div>
       ))}
 
       <button onClick={submit} disabled={submitting} style={{ marginTop: "20px" }}>

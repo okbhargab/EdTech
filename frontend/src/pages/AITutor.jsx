@@ -1,46 +1,40 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../api.jsx";
+import { useAuth } from "../AuthContext.jsx";
 import Layout from "../components/Layout.jsx";
 
-
 export default function AITutor() {
+  const { token } = useAuth();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  useEffect(()=>{
-    const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (!token) return;
 
     api("/ai/history", "GET", null, token)
-    .then(data=>{
-        setMessages(data);
-    })
-    .catch(()=>{});
-  },[]);
+      .then(data => setMessages(data))
+      .catch(err => setError(err.message || "Failed to load chat history"));
+  }, [token]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const token = localStorage.getItem("token");
-
     const userMessage = { role: "user", content: input };
     setMessages(prev => [...prev, userMessage]);
     setLoading(true);
+    setError("");
 
     try {
       const res = await api("/ai/ask", "POST", { question: input }, token);
-
       const aiMessage = { role: "ai", content: res.answer };
-
       setMessages(prev => [...prev, aiMessage]);
       setInput("");
-    } catch {
-      setMessages(prev => [
-        ...prev,
-        { role: "ai", content: "Error generating answer." }
-      ]);
+    } catch (err) {
+      setError(err.message || "Failed to get AI response");
+      setMessages(prev => [...prev, { role: "ai", content: `Error: ${err.message}` }]);
     }
-
     setLoading(false);
   };
 

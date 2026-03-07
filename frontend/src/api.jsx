@@ -1,4 +1,4 @@
-const BASE_URL="https://edtech-1-q9uy.onrender.com/";
+const BASE_URL = import.meta.env.VITE_API_BASE || "http://localhost:5000";
 
 export const api = async (path, method = "GET", body = null, token = null) => {
   const headers = {

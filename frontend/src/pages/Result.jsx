@@ -1,18 +1,26 @@
 import { useEffect, useState } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../api";
+import { useAuth } from "../AuthContext.jsx";
 import Layout from "../components/Layout.jsx";
+
 export default function Result() {
   const { id } = useParams();
-  const [result, setResult] = useState(null);
   const navigate = useNavigate();
+  const { token } = useAuth();
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api(`/tests/${id}/result`, "GET", null, localStorage.getItem("token"))
-      .then(setResult);
-  }, [id]);
+    if (!token) return;
+    
+    api(`/tests/${id}/result`, "GET", null, token)
+      .then(setResult)
+      .finally(() => setLoading(false));
+  }, [id, token]);
 
-  if (!result) return <p>Loading...</p>;
+  if (loading) return <Layout><p>Loading result...</p></Layout>;
+  if (!result) return <Layout><p>No result found.</p></Layout>;
 
   return (
   <Layout>

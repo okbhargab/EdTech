@@ -13,7 +13,7 @@ import {
 } from "recharts";
 
 export default function Dashboard() {
-  const { token, loading: authLoading, user } = useAuth();
+  const { token, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [analytics, setAnalytics] = useState(null);
   const [trends, setTrends] = useState(null);
@@ -38,17 +38,14 @@ export default function Dashboard() {
       .catch((err) => {
         setError(err.message || "Failed to load analytics");
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, authLoading]);
+  }, [token, authLoading, navigate]);
 
-  if (authLoading || !analytics || !trends) {
-    return <Layout><p>Loading analytics...</p></Layout>;
-  }
+  if (authLoading || !analytics || !trends) return <Layout><p>Loading analytics...</p></Layout>;
 
   return (
     <Layout>
       <h2>Dashboard</h2>
-
+      
       {error && <div style={{
         padding: "10px",
         marginBottom: "10px",
@@ -57,15 +54,10 @@ export default function Dashboard() {
         borderRadius: "4px",
         border: "1px solid #fcc"
       }}>Error: {error}</div>}
-
+      
       <div style={{ marginBottom: "20px" }}>
-        <Link to="/tests">
-          <button style={{ marginRight: "10px" }}>Take Test</button>
-        </Link>
-
-        <Link to="/ai">
-          <button style={{ marginRight: "10px" }}>Ask AI Tutor</button>
-        </Link>
+        <Link to="/tests"><button style={{ marginRight: "10px" }}>Take Test</button></Link>
+        <Link to="/ai"><button style={{ marginRight: "10px" }}>Ask AI Tutor</button></Link>
       </div>
 
       <hr style={{ margin: "20px 0" }} />
@@ -90,7 +82,6 @@ export default function Dashboard() {
           }
         />
       </div>
-
       <h3 style={{ marginTop: "32px" }}>Attempts Over Time</h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={trends.attemptsOverTime}>
@@ -130,4 +121,3 @@ function StatCard({ title, value }) {
     </div>
   );
 }
-
