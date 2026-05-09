@@ -40,6 +40,7 @@ import testRoutes from "./test.js";
 import analyticsRoutes from "../routes/analytics.routes.js";
 import aiRoutes from "../routes/ai.routes.js";
 import adminRoutes from "../routes/admin.routes.js";
+import usersRoutes from "../routes/users.routes.js";
 
 app.post("/auth/register",register);
 app.post("/auth/login",login);
@@ -48,6 +49,7 @@ app.use("/tests",authMiddleware,testRoutes);
 app.use("/analytics",analyticsRoutes);
 app.use("/ai", aiRoutes);
 app.use("/admin", adminRoutes);
+app.use("/users", usersRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "Ok", message: "Backend running" });

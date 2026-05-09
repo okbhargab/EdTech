@@ -68,3 +68,35 @@ export const getAnalyticsTrends = async (req, res) => {
   }
 };
 
+export const getLeaderboard = async (req, res) => {
+  try {
+    const { period } = req.query; // week, month, all-time
+    
+    let dateFilter = "";
+    if (period === "week") {
+      dateFilter = "WHERE s.submitted_at >= NOW() - INTERVAL '7 days'";
+    } else if (period === "month") {
+      dateFilter = "WHERE s.submitted_at >= NOW() - INTERVAL '30 days'";
+    }
+
+    const result = await pool.query(`
+      SELECT 
+        u.id AS user_id, 
+        u.name, 
+        COUNT(s.id)::int AS test_count, 
+        COALESCE(ROUND(AVG(s.score), 2), 0) AS average_score 
+      FROM users u 
+      JOIN submissions s ON u.id = s.user_id 
+      ${dateFilter}
+      GROUP BY u.id, u.name 
+      ORDER BY average_score DESC 
+      LIMIT 100
+    `);
+
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("Leaderboard error:", err);
+    res.status(500).json({ message: "Failed to fetch leaderboard" });
+  }
+};
+
