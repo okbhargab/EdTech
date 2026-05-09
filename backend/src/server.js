@@ -7,19 +7,11 @@ import  pool  from "./db.js";
 const app = express();
 
 // CORS configuration for production flexibility
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3000",
-  process.env.FRONTEND_URL,
-].filter(Boolean);
-
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
+  origin: "*", // Allow all origins for easier deployment
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
 
 app.use(express.json({ limit: "10mb" }));
 
